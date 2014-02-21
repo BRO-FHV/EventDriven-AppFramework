@@ -1,8 +1,8 @@
 <?php
 /*
- * This file is part of the Sulu CMS.
+ * This file is part of the BRO-Project.
  *
- * (c) MASSIVE ART WebServices GmbH
+ * (c) BRO - FHV
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
