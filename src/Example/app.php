@@ -12,7 +12,7 @@ namespace Example;
 
 use Bro\Network\Response;
 use Bro\Network\RequestEventArgs;
-use Bro\Network\Server;
+use Bro\Network\HttpServer;
 
 /**
  * Main access point of application
@@ -27,20 +27,19 @@ class App
 
     public static function main($args)
     {
-        $server = Server::create(8080);
-
+        $server = HttpServer::create($args[0]);
         self::$app = new App($server);
     }
 
     /**
-     * @var Server
+     * @var HttpServer
      */
     private $server;
 
     function __construct($server)
     {
         $this->server = $server;
-        $this->server->onRequest(array($this, 'request'));
+        $this->server->addRequestCallback(array($this, 'request'));
         $this->server->listen();
     }
 
@@ -51,7 +50,7 @@ class App
     public function request(RequestEventArgs $args)
     {
         // index page
-        if ($args->getPath() === '/') {
+        if ($args->getRequest()->getPath() === '/') {
             $content = file_get_contents('/test/folder/file.html');
             return new Response($content);
         } else {

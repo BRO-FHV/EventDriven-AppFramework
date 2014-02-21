@@ -16,49 +16,20 @@ use Bro\EventArgs;
 class RequestEventArgs extends EventArgs
 {
     /**
-     * @var string
+     * @var Request
      */
-    private $path;
-    /**
-     * @var array
-     */
-    private $getParams;
+    private $request;
 
-    /**
-     * @var array
-     */
-    private $postParams;
-
-    function __construct($path, $getParams = array(), $postParams = array())
+    function __construct($request)
     {
-        $this->path = $path;
-        $this->getParams = $getParams;
-        $this->postParams = $postParams;
+        $this->request = $request;
     }
 
     /**
-     * @return array
+     * @return \Bro\Network\Request
      */
-    public function getGetParams()
+    public function getRequest()
     {
-        return $this->getParams;
+        return $this->request;
     }
-
-    /**
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
-     * @return array
-     */
-    public function getPostParams()
-    {
-        return $this->postParams;
-    }
-
-
 } 

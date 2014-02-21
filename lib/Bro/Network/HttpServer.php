@@ -14,17 +14,17 @@ namespace Bro\Network;
  * Class Server
  * @package Bro\Network
  */
-class Server
+class HttpServer implements HttpServerInterface
 {
 
     /**
      * create a new server
      * @param integer $port
-     * @return Server
+     * @return HttpServerInterface
      */
     public static function create($port)
     {
-        return new Server($port);
+        return new HttpServer($port);
     }
 
     /**
@@ -33,9 +33,20 @@ class Server
     private function __construct($port)
     {
         $this->port = $port;
+
+        // register event
+        // TODO event names
+        register_event_listener('network.' . $this->port . '.request', array($this, 'onRequest'));
     }
 
+    /**
+     * @var int
+     */
     private $port;
+    /**
+     * @var callable[]
+     */
+    private $requestCallbacks = array();
 
     /**
      * @return int
@@ -58,10 +69,23 @@ class Server
      * register callback for all requests
      * @param callable $callback
      */
-    public function onRequest(callable $callback)
+    public function addRequestCallback(callable $callback)
     {
-        // register event
-        register_event_listener('network.' . $this->port . '.request', $callback);
+        $this->requestCallbacks[] = $callback;
+    }
+
+    /**
+     * called by system when a request come in
+     * @param $args
+     */
+    public function onRequest($args)
+    {
+        // TODO args definition
+        $request = new Request($args['path']);
+        $args = new RequestEventArgs($request);
+        foreach ($this->requestCallbacks as $callback) {
+            $callback($args);
+        }
     }
 
 } 
