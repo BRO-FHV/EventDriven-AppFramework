@@ -44,9 +44,9 @@ class HttpServer implements HttpServerInterface
      */
     private $port;
     /**
-     * @var callable[]
+     * @var callable
      */
-    private $requestCallbacks = array();
+    private $requestCallback;
 
     /**
      * @return int
@@ -69,23 +69,26 @@ class HttpServer implements HttpServerInterface
      * register callback for all requests
      * @param callable $callback
      */
-    public function addRequestCallback(callable $callback)
+    public function setRequestCallback(callable $callback)
     {
-        $this->requestCallbacks[] = $callback;
+        $this->requestCallback = $callback;
     }
 
     /**
      * called by system when a request come in
      * @param $args
+     * @return \Bro\Network\Response
      */
     public function onRequest($args)
     {
         // TODO args definition
         $request = new Request($args['path']);
         $args = new RequestEventArgs($request);
-        foreach ($this->requestCallbacks as $callback) {
-            $callback($args);
-        }
+        $callback = $this->requestCallback;
+        
+        /** @var Response $response */
+        $response = $callback($args);
+        return $response;
     }
 
 } 

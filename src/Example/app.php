@@ -39,7 +39,7 @@ class App
     function __construct($server)
     {
         $this->server = $server;
-        $this->server->addRequestCallback(array($this, 'request'));
+        $this->server->setRequestCallback(array($this, 'request'));
         $this->server->listen();
     }
 

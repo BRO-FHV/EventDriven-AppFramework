@@ -28,5 +28,5 @@ interface HttpServerInterface
      * register callback for all requests
      * @param callable $callback
      */
-    public function addRequestCallback(callable $callback);
+    public function setRequestCallback(callable $callback);
 }
