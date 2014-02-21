@@ -9,10 +9,17 @@
  */
 
 define('BASE_PATH', realpath(dirname(__FILE__)));
-function autoloader($class)
+function lib_autoloader($class)
 {
     $filename = BASE_PATH . '/lib/' . str_replace('\\', '/', $class) . '.php';
     include($filename);
 }
 
-spl_autoload_register('autoloader');
+function src_autoloader($class)
+{
+    $filename = BASE_PATH . '/src/' . str_replace('\\', '/', $class) . '.php';
+    include($filename);
+}
+
+spl_autoload_register('lib_autoloader');
+spl_autoload_register('src_autoloader');

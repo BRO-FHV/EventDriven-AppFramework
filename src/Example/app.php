@@ -28,10 +28,13 @@ class App
      */
     public static $app;
 
-    public static function main($args)
+    public static function main($argc, $argv)
     {
-        $server = HttpServer::create($args[0]);
-        $file = File::create($args[1]);
+        if ($argc < 2) {
+            throw new \InvalidArgumentException('Too few arguments');
+        }
+        $server = HttpServer::create($argv[0]);
+        $file = File::create($argv[1]);
         self::$app = new App($server, $file);
     }
 
@@ -45,10 +48,10 @@ class App
      */
     private $indexFile;
 
-    function __construct($server)
+    function __construct(HttpServerInterface $server, FileInterface $file)
     {
         $this->server = $server;
-        $this->indexFile = $server;
+        $this->indexFile = $file;
 
         // init server
         $this->server->setRequestCallback(array($this, 'request'));

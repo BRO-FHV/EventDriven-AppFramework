@@ -12,4 +12,4 @@ require('autoload.php');
 
 use Example\App;
 
-App::main($argv);
+App::main($argc, $argv);
