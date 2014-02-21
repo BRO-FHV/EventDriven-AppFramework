@@ -10,6 +10,9 @@
 
 namespace Example;
 
+use Bro\FileSystem\File;
+use Bro\FileSystem\FileInterface;
+use Bro\Network\HttpServerInterface;
 use Bro\Network\Response;
 use Bro\Network\RequestEventArgs;
 use Bro\Network\HttpServer;
@@ -28,17 +31,26 @@ class App
     public static function main($args)
     {
         $server = HttpServer::create($args[0]);
-        self::$app = new App($server);
+        $file = File::create($args[1]);
+        self::$app = new App($server, $file);
     }
 
     /**
-     * @var HttpServer
+     * @var HttpServerInterface
      */
     private $server;
+
+    /**
+     * @var FileInterface
+     */
+    private $indexFile;
 
     function __construct($server)
     {
         $this->server = $server;
+        $this->indexFile = $server;
+
+        // init server
         $this->server->setRequestCallback(array($this, 'request'));
         $this->server->listen();
     }
@@ -51,8 +63,7 @@ class App
     {
         // index page
         if ($args->getRequest()->getPath() === '/') {
-            $content = file_get_contents('/test/folder/file.html');
-            return new Response($content);
+            return new Response($this->indexFile->getContent());
         } else {
             $content = '';
             return new Response($content, 404);

@@ -85,7 +85,7 @@ class HttpServer implements HttpServerInterface
         $request = new Request($args['path']);
         $args = new RequestEventArgs($request);
         $callback = $this->requestCallback;
-        
+
         /** @var Response $response */
         $response = $callback($args);
         return $response;
